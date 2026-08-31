@@ -1,5 +1,4 @@
 #pragma once
-
 namespace tremolo {
 class PluginProcessor : public juce::AudioProcessor {
 public:
