@@ -56,13 +56,20 @@ void PluginProcessor::prepareToPlay(double sampleRate,
   // initialization that you need, e.g., allocate memory.
 
   tremolo.prepare(sampleRate, expectedMaxFramesPerBlock);
+
+  bypassTransitionSmoother.prepare( {
+    .sampleRate = sampleRate,
+    .maximumBlockSize = static_cast<juce::uint32>(expectedMaxFramesPerBlock),
+    .numChannels = static_cast<juce::uint32>(
+      juce::jmax(getTotalNumInputChannels(), getTotalNumInputChannels())),
+  });
 }
 
 void PluginProcessor::releaseResources() {
   // When playback stops, you can use this as an opportunity to free up any
   // spare memory, etc.
-
   tremolo.reset();
+  bypassTransitionSmoother.reset();
 }
 
 bool PluginProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const {
@@ -101,21 +108,24 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
        std::views::iota(totalNumInputChannels, totalNumOutputChannels)) {
     buffer.clear(channelToClear, 0, buffer.getNumSamples());
   }
-
-  // TODO: update parameters
   tremolo.setModulationRate(parameters.rate.get());
-  // TODO: check for bypass
-  if (parameters.bypassed.get()) {
+  bypassTransitionSmoother.setBypass(parameters.bypassed.get());
+  tremolo.setLfoWaveform(static_cast<Tremolo::LfoWaveform>(parameters.waveform.getIndex()));
+
+  if (parameters.bypassed.get() && !bypassTransitionSmoother.isTransitioning()) {
     return;
   }
   juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> smoothedOutputGain;
   smoothedOutputGain.setTargetValue(parameters.outputgain.get());
+
+  bypassTransitionSmoother.setDryBuffer(buffer);
   // apply tremolo
   tremolo.process(buffer);
   for (const auto sample : std::views::iota(0,buffer.getNumSamples())){
     const auto currentGain = smoothedOutputGain.getNextValue();
     buffer.applyGain(sample, 1, currentGain);
   }
+  bypassTransitionSmoother.mixToWetBuffer(buffer);
   
 }
 
@@ -147,7 +157,6 @@ void PluginProcessor::setStateInformation(const void* data, int sizeInBytes) {
 }
 
   juce::AudioProcessorParameter* PluginProcessor::getBypassParameter() const {
-    
     return &parameters.bypassed;
   }
 

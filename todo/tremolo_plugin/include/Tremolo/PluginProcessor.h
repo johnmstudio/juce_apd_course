@@ -33,11 +33,13 @@ public:
   void getStateInformation(juce::MemoryBlock& destData) override;
   void setStateInformation(const void* data, int sizeInBytes) override;
 
-  juce::virtual AudioProcessorParameter* getBypassParameter() const override;
+  juce::AudioProcessorParameter* getBypassParameter() const override;
 
 private:
   // TODO: add parameters
   Parameters parameters{*this};
+
+  BypassTransitionSmoother bypassTransitionSmoother;
 
   Tremolo tremolo;
 
