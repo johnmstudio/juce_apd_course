@@ -16,7 +16,8 @@ TEST(JsonSerializer, SerializeToString) {
   "pluginName": "Tremolo",
   "modulationRateHz": 10.0,
   "bypassed": true,
-  "modulationWaveform": "Triangle"
+  "modulationWaveform": "Triangle",
+  "modulationOutputgain": 0.5
 })";
   juce::MemoryBlock block;
   juce::MemoryOutputStream outputStream{block, false};
@@ -36,7 +37,8 @@ TEST(JsonSerializer, DeserializeFromString) {
   "pluginName": "Tremolo",
   "modulationRateHz": 10.0,
   "bypassed": true,
-  "modulationWaveform": "Triangle"
+  "modulationWaveform": "Triangle",
+  "modulationOutputgain": 0.5
 })";
 
   juce::MemoryInputStream inputStream{
