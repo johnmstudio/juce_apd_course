@@ -7,12 +7,16 @@ public:
 
   void resized() override;
 
+
 private:
 
   Tremolo sigmaTremolo;
 
   juce::ImageComponent background;
   juce::ImageComponent logo;
+
+  juce::Slider rateSlider;
+  juce::Slider strokeWidthSlider;
 
   LfoVisualizer lfoVisualizer;
   float strokeWidth;
