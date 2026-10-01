@@ -42,12 +42,22 @@ namespace{
       0);
     return addParameterToProcessor(processor, std::move(parameter));
   }
+  juce::AudioParameterFloat& createModDepthParameter(juce::AudioProcessor& processor) {
+    constexpr auto versionHint = 1;
+    auto parameter = std::make_unique<juce::AudioParameterFloat>(
+    juce::ParameterID("modulation.depth", versionHint),
+    "Modulation Depth",    
+    juce::NormalisableRange{0.f,1.f,0.01f},.4f,
+    juce::AudioParameterFloatAttributes{}.withLabel("rate"));
+    return addParameterToProcessor(processor, std::move(parameter));
+  }
 }
 Parameters::Parameters(juce::AudioProcessor& processor)
   : rate{createModulationRateParameter(processor)},
     outputgain{createOutputGainParameter(processor)},
     bypassed{createBypassedParameter(processor)},
-    waveform{createWaveformParameter(processor)}
+    waveform{createWaveformParameter(processor)},
+    moddepth(createModDepthParameter(processor))
 {
 }
 }  // namespace tremolo

@@ -1,5 +1,4 @@
 #pragma once
-
 namespace tremolo {
 class Tremolo {
 public:
@@ -34,13 +33,17 @@ public:
     }
   }
 
+  void setModulationDepth(float depth) noexcept {
+    modulationDepth = depth;
+  }
+
   void process(juce::AudioBuffer<float>& buffer) noexcept {
     updateLfoWaveform();
     // for each frame
     for (const auto frameIndex : std::views::iota(0, buffer.getNumSamples())) {
       // generate the LFO value
       const auto lfoValue = getNextLfoValue();
-      constexpr auto modulationDepth = 0.4f;
+      // const auto modulationDepth = setModulationDepth();
       const auto modulationValue = modulationDepth * lfoValue + 1.f;
       // for each channel sample in the frame
       for (const auto channelIndex :
@@ -63,15 +66,13 @@ public:
     }
   }
 
-  /*void reset() noexcept {
-    for (auto& lfo : lfos) {
-      lfo.reset();
-    }
-  }*/
+  auto getlfo() {
+    return currentLfo;
+  }
 
 private:
   // You should put class members and private functions here
-
+  float modulationDepth = 0.4f;
   static float triangle(float phase) {
     const auto ft = phase / juce::MathConstants<float>::twoPi;
     return 4.f * std::abs(ft - std::floor(ft + 0.5f)) - 1.f;
@@ -87,6 +88,8 @@ private:
     }
   }
 
+  private:
+
   std::array<juce::dsp::Oscillator<float>, 2u> lfos{
      juce::dsp::Oscillator<float>{[](auto phase){ return std::sin(phase); }},
      juce::dsp::Oscillator<float>{triangle},
@@ -95,4 +98,6 @@ private:
   LfoWaveform currentLfo = LfoWaveform::sine;
   LfoWaveform lfoToSet = currentLfo;
 };
+
+
 }  // namespace tremolo

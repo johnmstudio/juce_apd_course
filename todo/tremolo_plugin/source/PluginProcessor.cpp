@@ -109,6 +109,7 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
     buffer.clear(channelToClear, 0, buffer.getNumSamples());
   }
   tremolo.setModulationRate(parameters.rate.get());
+  tremolo.setModulationDepth(parameters.moddepth.get());
   bypassTransitionSmoother.setBypass(parameters.bypassed.get());
   tremolo.setLfoWaveform(static_cast<Tremolo::LfoWaveform>(parameters.waveform.getIndex()));
 
@@ -130,12 +131,12 @@ void PluginProcessor::processBlock(juce::AudioBuffer<float>& buffer,
 }
 
 bool PluginProcessor::hasEditor() const {
-  return false;
+  return true;
 }
 
 // This function will be called to create an instance of the editor
 juce::AudioProcessorEditor* PluginProcessor::createEditor() {
-  return nullptr;
+  return new PluginEditor(*this);
 }
 
 void PluginProcessor::getStateInformation(juce::MemoryBlock& destData) {
