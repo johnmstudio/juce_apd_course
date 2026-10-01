@@ -16,11 +16,14 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
   };
   rateSlider.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider);
-  strokeWidthSlider.setRange(0,10,1);
-  // strokeWidthSlider.onValueChange = [this] {
 
-  // };
+  strokeWidthSlider.setRange(0,10,1);
+  strokeWidthSlider.setValue(6.0, juce::dontSendNotification);
+  strokeWidthSlider.onValueChange = [this] {
+    lfoVisualizer.setStrokeWidth(strokeWidthSlider.getValue());
+  };
   addAndMakeVisible(strokeWidthSlider);
+
   addAndMakeVisible(lfoVisualizer);
   
 
@@ -28,8 +31,6 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
   // editor's size to whatever you need it to be.
   setSize(540, 300);
 }
-
-
 
 void PluginEditor::resized() {
   auto bounds = getLocalBounds();
@@ -59,9 +60,8 @@ void PluginEditor::resized() {
   int Current_lfo = static_cast<int>(sigmaTremolo.getlfo());
   std::cout << "Current LFO: " << static_cast<int>(sigmaTremolo.getlfo());
 
-  lfoVisualizer.strokeWidth = 6.f;
   const auto lfov_halfHeight = lfoVisualizer.getHeight() / 2;
-  const auto lfov_amplitude = lfov_halfHeight - lfoVisualizer.strokeWidth/2.f;
+  const auto lfov_amplitude = lfov_halfHeight - 10/2.f;
   const auto lfov_startingP = 0 - lfoVisualizer.strokeWidth;
   // Change lfov_startingP "0" to phase.
 

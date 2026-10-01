@@ -3,6 +3,12 @@ namespace tremolo {
 public:
         juce::Path sineWave;
         float strokeWidth = 6.f;
+
+        void setStrokeWidth(float sigma) {
+            strokeWidth = sigma;
+            repaint();
+        }
+
         void paint (juce::Graphics& g) override {
             /*
             juce::Path sine;
@@ -19,6 +25,7 @@ public:
             }*/            
             g.setColour(juce::Colours::orange);
             g.strokePath(sineWave, juce::PathStrokeType(strokeWidth));
+    
         }
     };
 }
