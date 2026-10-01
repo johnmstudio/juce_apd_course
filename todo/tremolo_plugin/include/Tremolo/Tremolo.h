@@ -70,13 +70,15 @@ public:
     return currentLfo;
   }
 
-private:
-  // You should put class members and private functions here
-  float modulationDepth = 0.4f;
   static float triangle(float phase) {
     const auto ft = phase / juce::MathConstants<float>::twoPi;
     return 4.f * std::abs(ft - std::floor(ft + 0.5f)) - 1.f;
   }
+
+private:
+  // You should put class members and private functions here
+  float modulationDepth = 0.4f;
+  
 
   float getNextLfoValue() {
     return lfos[juce::toUnderlyingType(currentLfo)].processSample(0.f);
@@ -87,6 +89,10 @@ private:
       currentLfo = lfoToSet;
     }
   }
+  
+  public:
+
+  LfoWaveform currentLfo = LfoWaveform::sine;
 
   private:
 
@@ -95,7 +101,6 @@ private:
      juce::dsp::Oscillator<float>{triangle},
     };
   
-  LfoWaveform currentLfo = LfoWaveform::sine;
   LfoWaveform lfoToSet = currentLfo;
 };
 

@@ -14,16 +14,6 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
   setSize(540, 270);
 }
 
-// -- Instância da classe Tremolo
-Tremolo sigmaTremolo;
-// -- Funções de onda
-float fsine(float pi) {
-    return std::sin(pi);
-  }
-float ftriangle(float sigma) {
-  const auto ft = sigma / juce::MathConstants<float>::twoPi;
-  return 4.f * std::abs(ft - std::floor(ft + 0.5f)) - 1.f;
-}
 //
 
 void PluginEditor::resized() {
@@ -46,16 +36,15 @@ void PluginEditor::resized() {
   // Dois if. Mudar quando preciso.
   if (Current_lfo == 0){
   lfoVisualizer.sineWave.clear();
-  lfoVisualizer.sineWave.startNewSubPath(lfov_startingP, lfov_halfHeight + lfov_amplitude * fsine(lfov_startingP));
+  lfoVisualizer.sineWave.startNewSubPath(lfov_startingP, lfov_halfHeight + lfov_amplitude * sin(lfov_startingP));
   for (const auto x : std::views::iota(0, static_cast<int>(lfoVisualizer.getWidth() + lfoVisualizer.strokeWidth))) {
-      lfoVisualizer.sineWave.lineTo(x, lfov_halfHeight + lfov_amplitude * fsine(0.1 * x));
+      lfoVisualizer.sineWave.lineTo(x, lfov_halfHeight + lfov_amplitude * sin(0.1 * x));
   }
-  }
-  if (Current_lfo != 0) {
+  } else {
   lfoVisualizer.sineWave.clear();
-  lfoVisualizer.sineWave.startNewSubPath(lfov_startingP, lfov_halfHeight + lfov_amplitude * ftriangle(lfov_startingP));
+  lfoVisualizer.sineWave.startNewSubPath(lfov_startingP, lfov_halfHeight + lfov_amplitude * sigmaTremolo.triangle(lfov_startingP));
   for (const auto x : std::views::iota(0, static_cast<int>(lfoVisualizer.getWidth() + lfoVisualizer.strokeWidth))) {
-      lfoVisualizer.sineWave.lineTo(x, lfov_halfHeight + lfov_amplitude * ftriangle(0.1 * x));
+      lfoVisualizer.sineWave.lineTo(x, lfov_halfHeight + lfov_amplitude * sigmaTremolo.triangle(0.1 * x));
   }
 }
 }

@@ -8,6 +8,9 @@ public:
   void resized() override;
 
 private:
+
+  Tremolo sigmaTremolo;
+
   juce::ImageComponent background;
   juce::ImageComponent logo;
 
