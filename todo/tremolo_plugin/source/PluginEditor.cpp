@@ -1,5 +1,9 @@
 namespace tremolo {
-PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
+PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) ,
+rateAttachment{p.getParameterRefs().rate, rateSlider} , 
+rateAttachment2{p.getParameterRefs().rate, rateSlider2} ,
+outputGainAttachment{p.getParameterRefs().outputgain, outputGainSlider} , 
+modDepthAttachment{p.getParameterRefs().moddepth, modDepthSlider} {
   background.setImage(juce::ImageCache::getFromMemory(
       assets::Background_png, assets::Background_pngSize));
 
@@ -10,10 +14,6 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
   rateSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
   rateSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
   rateSlider.setPopupDisplayEnabled(true,true,this);
-  rateSlider.setRange(1,30,0.5);
-  rateSlider.onValueChange = [this] {
-    DBG("Rate slider value: " << rateSlider.getValue());
-  };
   rateSlider.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider);
 
@@ -23,6 +23,24 @@ PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) {
     lfoVisualizer.setStrokeWidth(strokeWidthSlider.getValue());
   };
   addAndMakeVisible(strokeWidthSlider);
+
+  outputGainSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+  outputGainSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+  outputGainSlider.setPopupDisplayEnabled(true,true,this);
+  outputGainSlider.setTextValueSuffix("db");
+  addAndMakeVisible(outputGainSlider);
+  
+  modDepthSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+  modDepthSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+  modDepthSlider.setPopupDisplayEnabled(true,true,this);
+  modDepthSlider.setTextValueSuffix("db");
+  addAndMakeVisible(modDepthSlider);
+
+  rateSlider2.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+  rateSlider2.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+  rateSlider2.setPopupDisplayEnabled(true,true,this);
+  rateSlider2.setTextValueSuffix(" Hz");
+  addAndMakeVisible(rateSlider2);
 
   addAndMakeVisible(lfoVisualizer);
   
@@ -53,6 +71,29 @@ void PluginEditor::resized() {
   rateSliderBounds.removeFromTop(40);
   rateSliderBounds.removeFromBottom(150);
   rateSlider.setBounds(rateSliderBounds);
+
+  auto rateSlider2Bounds = bounds;
+  rateSlider2Bounds.removeFromLeft(310);
+  rateSlider2Bounds.removeFromRight(160);
+  rateSlider2Bounds.removeFromTop(50);
+  rateSlider2Bounds.removeFromBottom(160);
+  rateSlider2.setBounds(rateSlider2Bounds);
+
+
+  auto outputGainBounds = bounds;
+  outputGainBounds.removeFromLeft(80);
+  outputGainBounds.removeFromRight(380);
+  outputGainBounds.removeFromTop(45);
+  outputGainBounds.removeFromBottom(155);
+  outputGainSlider.setBounds(outputGainBounds);
+
+  auto modDepthBounds = bounds;
+  modDepthBounds.removeFromLeft(410);
+  modDepthBounds.removeFromRight(50);
+  modDepthBounds.removeFromTop(45);
+  modDepthBounds.removeFromBottom(155);
+  modDepthSlider.setBounds(modDepthBounds);
+
 
   lfoVisualizer.setBounds(18, 149, 504, 92);
 

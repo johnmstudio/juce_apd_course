@@ -11,12 +11,22 @@ public:
 private:
 
   Tremolo sigmaTremolo;
-
+  
   juce::ImageComponent background;
   juce::ImageComponent logo;
 
   juce::Slider rateSlider;
   juce::Slider strokeWidthSlider;
+  juce::SliderParameterAttachment rateAttachment;
+  juce::Slider rateSlider2;
+  juce::SliderParameterAttachment rateAttachment2;
+
+  juce::Slider outputGainSlider;
+  juce::SliderParameterAttachment outputGainAttachment;
+
+  juce::Slider modDepthSlider;
+  juce::SliderParameterAttachment modDepthAttachment;
+
 
   LfoVisualizer lfoVisualizer;
   float strokeWidth;
