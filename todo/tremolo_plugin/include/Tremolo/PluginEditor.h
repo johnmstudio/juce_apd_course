@@ -15,18 +15,21 @@ private:
   juce::ImageComponent background;
   juce::ImageComponent logo;
 
-  juce::Slider rateSlider;
+  RateSlider rateSlider;
   juce::Slider strokeWidthSlider;
   juce::SliderParameterAttachment rateAttachment;
-  juce::Slider rateSlider2;
+  RateSlider rateSlider2;
   juce::SliderParameterAttachment rateAttachment2;
 
-  juce::Slider outputGainSlider;
+  RateSlider outputGainSlider;
   juce::SliderParameterAttachment outputGainAttachment;
 
-  juce::Slider modDepthSlider;
+  RateSlider modDepthSlider;
   juce::SliderParameterAttachment modDepthAttachment;
 
+
+  juce::ToggleButton bypassButton{"BYPASSED"};
+  juce::ButtonParameterAttachment bypassAttachment;
 
   LfoVisualizer lfoVisualizer;
   float strokeWidth;

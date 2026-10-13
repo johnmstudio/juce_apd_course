@@ -2,8 +2,9 @@ namespace tremolo {
 PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) ,
 rateAttachment{p.getParameterRefs().rate, rateSlider} , 
 rateAttachment2{p.getParameterRefs().rate, rateSlider2} ,
-outputGainAttachment{p.getParameterRefs().outputgain, outputGainSlider} , 
-modDepthAttachment{p.getParameterRefs().moddepth, modDepthSlider} {
+outputGainAttachment{p.getParameterRefs().outputgain, outputGainSlider} ,
+modDepthAttachment{p.getParameterRefs().moddepth, modDepthSlider} ,
+bypassAttachment{p.getParameterRefs().bypassed, bypassButton} {
   background.setImage(juce::ImageCache::getFromMemory(
       assets::Background_png, assets::Background_pngSize));
 
@@ -42,6 +43,13 @@ modDepthAttachment{p.getParameterRefs().moddepth, modDepthSlider} {
   rateSlider2.setTextValueSuffix(" Hz");
   addAndMakeVisible(rateSlider2);
 
+  bypassButton.onClick = [this] () {
+    bypassButton.setButtonText(bypassButton.getToggleState() ? "Bypassed" : "Off");
+  };
+  bypassButton.onClick();
+  addAndMakeVisible(bypassButton);
+
+
   addAndMakeVisible(lfoVisualizer);
   
 
@@ -63,18 +71,22 @@ void PluginEditor::resized() {
   strokeWidthSliderBounds.removeFromRight(270);
   strokeWidthSlider.setBounds(strokeWidthSliderBounds);
 
+  auto bypassButtonBounds = foot;
+  bypassButtonBounds.removeFromLeft(310);
+  bypassButton.setBounds(bypassButtonBounds);
+
   logo.setBounds({16, 16, 105, 24});
   
   auto rateSliderBounds = bounds;
-  rateSliderBounds.removeFromLeft(230);
-  rateSliderBounds.removeFromRight(230);
+  rateSliderBounds.removeFromLeft(200);
+  rateSliderBounds.removeFromRight(260);
   rateSliderBounds.removeFromTop(40);
   rateSliderBounds.removeFromBottom(150);
   rateSlider.setBounds(rateSliderBounds);
 
   auto rateSlider2Bounds = bounds;
-  rateSlider2Bounds.removeFromLeft(310);
-  rateSlider2Bounds.removeFromRight(160);
+  rateSlider2Bounds.removeFromLeft(300);
+  rateSlider2Bounds.removeFromRight(180);
   rateSlider2Bounds.removeFromTop(50);
   rateSlider2Bounds.removeFromBottom(160);
   rateSlider2.setBounds(rateSlider2Bounds);
@@ -84,14 +96,14 @@ void PluginEditor::resized() {
   outputGainBounds.removeFromLeft(80);
   outputGainBounds.removeFromRight(380);
   outputGainBounds.removeFromTop(45);
-  outputGainBounds.removeFromBottom(155);
+  outputGainBounds.removeFromBottom(145);
   outputGainSlider.setBounds(outputGainBounds);
 
   auto modDepthBounds = bounds;
   modDepthBounds.removeFromLeft(410);
   modDepthBounds.removeFromRight(50);
   modDepthBounds.removeFromTop(45);
-  modDepthBounds.removeFromBottom(155);
+  modDepthBounds.removeFromBottom(145);
   modDepthSlider.setBounds(modDepthBounds);
 
 
