@@ -4,6 +4,7 @@ namespace tremolo {
 class PluginEditor : public juce::AudioProcessorEditor {
 public:
   explicit PluginEditor(PluginProcessor&);
+  ~PluginEditor() override;
 
   void resized() override;
 
@@ -15,7 +16,8 @@ private:
   juce::ImageComponent background;
   juce::ImageComponent logo;
 
-  RateSlider rateSlider;
+  // RateSlider rateSlider;
+  juce::Slider rateSlider;
   juce::Slider strokeWidthSlider;
   juce::SliderParameterAttachment rateAttachment;
   RateSlider rateSlider2;
@@ -34,7 +36,9 @@ private:
   LfoVisualizer lfoVisualizer;
   float strokeWidth;
   juce::Path sineWave;
-  
+
+  // juce::LookAndFeel_V2 lookAndFeel;
+  CustomLookAndFeel lookAndFeel;
 
   JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PluginEditor)
 };
