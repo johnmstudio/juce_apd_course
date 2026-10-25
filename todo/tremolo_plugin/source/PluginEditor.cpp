@@ -1,5 +1,6 @@
 namespace tremolo {
 PluginEditor::PluginEditor(PluginProcessor& p) : AudioProcessorEditor(&p) ,
+waveformAttachment{p.getParameterRefs().waveform, waveformComboBox},
 rateAttachment{p.getParameterRefs().rate, rateSlider} , 
 rateAttachment2{p.getParameterRefs().rate, rateSlider2} ,
 outputGainAttachment{p.getParameterRefs().outputgain, outputGainSlider} ,
@@ -12,6 +13,11 @@ bypassAttachment{p.getParameterRefs().bypassed, bypassButton} {
       juce::ImageCache::getFromMemory(assets::Logo_png, assets::Logo_pngSize));
   addAndMakeVisible(background);
   addAndMakeVisible(logo);
+
+  waveformComboBox.addItemList(p.getParameterRefs().waveform.choices, 1);
+  waveformAttachment.sendInitialUpdate();
+  addAndMakeVisible(waveformComboBox);
+
   rateSlider.setSliderStyle(juce::Slider::SliderStyle::Rotary);
   rateSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
   rateSlider.setPopupDisplayEnabled(true,true,this);
@@ -81,20 +87,27 @@ void PluginEditor::resized() {
   bypassButtonBounds.removeFromLeft(310);
   bypassButton.setBounds(bypassButtonBounds);
 
+  auto waveformComboBoxBounds = bounds;
+  waveformComboBoxBounds.removeFromLeft(210);
+  waveformComboBoxBounds.removeFromRight(210);
+  waveformComboBoxBounds.removeFromTop(105);
+  waveformComboBoxBounds.removeFromBottom(145);
+  waveformComboBox.setBounds(waveformComboBoxBounds);
+
   logo.setBounds({16, 16, 105, 24});
   
   auto rateSliderBounds = bounds;
   rateSliderBounds.removeFromLeft(200);
   rateSliderBounds.removeFromRight(260);
-  rateSliderBounds.removeFromTop(40);
-  rateSliderBounds.removeFromBottom(150);
+  rateSliderBounds.removeFromTop(10);
+  rateSliderBounds.removeFromBottom(180);
   rateSlider.setBounds(rateSliderBounds);
 
   auto rateSlider2Bounds = bounds;
   rateSlider2Bounds.removeFromLeft(300);
   rateSlider2Bounds.removeFromRight(180);
-  rateSlider2Bounds.removeFromTop(50);
-  rateSlider2Bounds.removeFromBottom(160);
+  rateSlider2Bounds.removeFromTop(20);
+  rateSlider2Bounds.removeFromBottom(190);
   rateSlider2.setBounds(rateSlider2Bounds);
 
 
