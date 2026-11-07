@@ -14,6 +14,13 @@ bypassAttachment{p.getParameterRefs().bypassed, bypassButton} {
   addAndMakeVisible(background);
   addAndMakeVisible(logo);
 
+  addAndMakeVisible(waveformLabel);
+  addAndMakeVisible(rateLabel);
+  rateLabel.setJustificationType(juce::Justification::centred);
+  rateLabel.setInterceptsMouseClicks(false,false);
+  waveformLabel.setFont(lookAndFeel.getSideLabelsFont());
+  rateLabel.setFont(lookAndFeel.getSideLabelsFont());
+
   waveformComboBox.addItemList(p.getParameterRefs().waveform.choices, 1);
   waveformAttachment.sendInitialUpdate();
   addAndMakeVisible(waveformComboBox);
@@ -103,6 +110,8 @@ void PluginEditor::resized() {
   rateSliderBounds.removeFromBottom(180);
   rateSlider.setBounds(rateSliderBounds);
 
+  rateLabel.setBounds(rateSliderBounds);
+
   auto rateSlider2Bounds = bounds;
   rateSlider2Bounds.removeFromLeft(300);
   rateSlider2Bounds.removeFromRight(180);
@@ -125,6 +134,9 @@ void PluginEditor::resized() {
   modDepthBounds.removeFromBottom(145);
   modDepthSlider.setBounds(modDepthBounds);
 
+  const auto waveformLabelBounds = 
+    waveformComboBoxBounds.translated(0,-waveformComboBoxBounds.getHeight());
+  waveformLabel.setBounds(waveformLabelBounds);
 
   lfoVisualizer.setBounds(18, 149, 504, 92);
 

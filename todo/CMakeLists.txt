@@ -108,6 +108,8 @@ juce_add_binary_data(tremolo_plugin_assets
     assets/Logo.png
     assets/Inter-Bold.ttf
     assets/Inter-Medium.ttf
+    assets/Atma-Regular.ttf
+    assets/Atma-SemiBold.ttf
 )
 
 add_library(tremolo::tremolo_plugin_assets ALIAS tremolo_plugin_assets)
