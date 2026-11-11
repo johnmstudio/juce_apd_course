@@ -20,6 +20,7 @@ bypassAttachment{p.getParameterRefs().bypassed, bypassButton} {
   rateLabel.setInterceptsMouseClicks(false,false);
   waveformLabel.setFont(lookAndFeel.getSideLabelsFont());
   rateLabel.setFont(lookAndFeel.getSideLabelsFont());
+  rateLabel.setColour(juce::Label::textColourId, CustomLookAndFeel::getColor(CustomLookAndFeel::Colors::paleBlue));
 
   waveformComboBox.addItemList(p.getParameterRefs().waveform.choices, 1);
   waveformAttachment.sendInitialUpdate();
@@ -98,7 +99,7 @@ void PluginEditor::resized() {
   waveformComboBoxBounds.removeFromLeft(210);
   waveformComboBoxBounds.removeFromRight(210);
   waveformComboBoxBounds.removeFromTop(105);
-  waveformComboBoxBounds.removeFromBottom(145);
+  waveformComboBoxBounds.removeFromBottom(140);
   waveformComboBox.setBounds(waveformComboBoxBounds);
 
   logo.setBounds({16, 16, 105, 24});
